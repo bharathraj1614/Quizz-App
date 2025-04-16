@@ -99,11 +99,20 @@ function QuizContextProvider({ children }) {
     0
   );
 
-  useEffect(function () {
-    fetch("http://localhost:9000/questions")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch((err) => dispatch({ type: "dataFailed", payload: err }));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          "https://json-server-app-7b77.onrender.com/Quiz-app-questions"
+        );
+        const data = await res.json();
+        dispatch({ type: "dataReceived", payload: data });
+      } catch (err) {
+        dispatch({ type: "dataFailed", payload: err });
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
